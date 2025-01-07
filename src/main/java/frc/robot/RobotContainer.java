@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -32,6 +33,39 @@ import java.util.List;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    private static final Joystick driverLeftStick = new Joystick(0);
+    private static final Joystick driverRightStick = new Joystick(1);
+    private static final XboxController copilotXbox = new XboxController(2);
+
+    private final JoystickButton left1Button = new JoystickButton(driverLeftStick, 1);
+    private final JoystickButton left2Button = new JoystickButton(driverLeftStick, 2);
+    private final JoystickButton left3Button = new JoystickButton(driverLeftStick, 3);
+    private final JoystickButton left4Button = new JoystickButton(driverLeftStick, 4);
+
+    private final JoystickButton left7Button = new JoystickButton(driverLeftStick, 7);
+    private final JoystickButton left8Button = new JoystickButton(driverLeftStick, 8);
+    private final JoystickButton left9Button = new JoystickButton(driverLeftStick, 9);
+    private final JoystickButton left10Button = new JoystickButton(driverLeftStick, 10);
+
+    private final JoystickButton right1Button = new JoystickButton(driverRightStick, 1);
+    private final JoystickButton right2Button = new JoystickButton(driverRightStick, 2);
+    private final JoystickButton right3Button = new JoystickButton(driverRightStick, 3);
+    private final JoystickButton right4Button = new JoystickButton(driverRightStick, 4);
+    private final JoystickButton right6Button = new JoystickButton(driverRightStick, 6);
+
+    private final JoystickButton right9Button = new JoystickButton(driverRightStick, 9);
+    private final JoystickButton right10Button = new JoystickButton(driverRightStick, 10);
+
+    private final JoystickButton xButton = new JoystickButton(copilotXbox, Button.kX.value);
+    private final JoystickButton bButton = new JoystickButton(copilotXbox, Button.kB.value);
+    private final JoystickButton aButton = new JoystickButton(copilotXbox, Button.kA.value);
+    private final JoystickButton yButton = new JoystickButton(copilotXbox, Button.kY.value);
+    
+    private final JoystickButton backButton = new JoystickButton(copilotXbox, Button.kBack.value);
+    private final JoystickButton startButton = new JoystickButton(copilotXbox, Button.kStart.value);
+    private final JoystickButton rightBumperButton = new JoystickButton(copilotXbox, Button.kRightBumper.value);
+    private final JoystickButton leftBumperButton = new JoystickButton(copilotXbox, Button.kLeftBumper.value);
+
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
