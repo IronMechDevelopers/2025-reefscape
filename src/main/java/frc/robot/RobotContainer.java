@@ -56,16 +56,6 @@ public class RobotContainer {
     private final JoystickButton right9Button = new JoystickButton(driverRightStick, 9);
     private final JoystickButton right10Button = new JoystickButton(driverRightStick, 10);
 
-    private final JoystickButton xButton = new JoystickButton(copilotXbox, Button.kX.value);
-    private final JoystickButton bButton = new JoystickButton(copilotXbox, Button.kB.value);
-    private final JoystickButton aButton = new JoystickButton(copilotXbox, Button.kA.value);
-    private final JoystickButton yButton = new JoystickButton(copilotXbox, Button.kY.value);
-    
-    private final JoystickButton backButton = new JoystickButton(copilotXbox, Button.kBack.value);
-    private final JoystickButton startButton = new JoystickButton(copilotXbox, Button.kStart.value);
-    private final JoystickButton rightBumperButton = new JoystickButton(copilotXbox, Button.kRightBumper.value);
-    private final JoystickButton leftBumperButton = new JoystickButton(copilotXbox, Button.kLeftBumper.value);
-
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
