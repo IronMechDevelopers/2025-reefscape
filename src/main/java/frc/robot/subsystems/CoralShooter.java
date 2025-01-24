@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -53,12 +54,7 @@ public class CoralShooter extends SubsystemBase {
    * @return a command
    */
   public Command shootCoralCommand(double speed) {
-    // Inline construction of command goes here.
-    // Subsystem::RunOnce implicitly requires `this` subsystem.
-    return runOnce(
-        () -> {
-          setMotorToPercent(speed);
-        }).andThen(() -> {setMotorToPercent(0.0);});  // TODO: check if this is the right thing to do
+    return Commands.startEnd(() -> setMotorToPercent(speed), () -> stopMotor(), this);
   }
 
   /**
