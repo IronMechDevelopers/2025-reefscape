@@ -18,11 +18,11 @@ public class CoralShooter extends SubsystemBase {
   /** Creates a new ExampleSubsystem. */
   public CoralShooter() {
 
-        this.shooterTopMotor = new SparkMax(MotorIds.kTopShooterMotor, MotorType.kBrushless);
+        this.shooterTopMotor = new SparkMax(MotorIds.kTopShooterMotor, MotorType.kBrushed);
   
         /**shooterTopMotor.restoreFactoryDefaults(); */
   
-        m_encoderTop = shooterTopMotor.getEncoder();
+        // m_encoderTop = shooterTopMotor.getEncoder();
   
         // shooterTopMotor.setInverted(true);
   
