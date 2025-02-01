@@ -58,11 +58,21 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 31;
     public static final int kRearLeftTurningCanId = 41;
 
+    // public static final int kFrontLeftDrivingCanId = 30;
+    // public static final int kFrontRightDrivingCanId = 40;
+    // public static final int kRearRightDrivingCanId = 10;
+    // public static final int kRearLeftDrivingCanId = 20;
+
+    // public static final int kFrontLeftTurningCanId = 31;
+    // public static final int kFrontRightTurningCanId = 41;
+    // public static final int kRearRightTurningCanId = 11;
+    // public static final int kRearLeftTurningCanId = 21;
+
     public static final boolean kGyroReversed = false;
   }
   public static final class MotorIds {
 
-    public static final int kTopShooterMotor = 60; 
+    public static final int kTopShooterMotor = 51;  
 
   }
 
@@ -93,6 +103,7 @@ public final class Constants {
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+
 
     public static final double kPXController = 1;
     public static final double kPYController = 1;
