@@ -1,3 +1,4 @@
+
 // Copyright (c) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
@@ -15,7 +16,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
+import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -56,6 +57,12 @@ public class RobotContainer {
 
     private final JoystickButton right9Button = new JoystickButton(driverRightStick, 9);
     private final JoystickButton right10Button = new JoystickButton(driverRightStick, 10);
+    
+    private final JoystickButton xButton = new JoystickButton(copilotXbox, Button.kX.value);
+    private final JoystickButton bButton = new JoystickButton(copilotXbox, Button.kB.value);
+    private final JoystickButton aButton = new JoystickButton(copilotXbox, Button.kA.value);
+    private final JoystickButton yButton = new JoystickButton(copilotXbox, Button.kY.value);
+
 
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
@@ -103,12 +110,14 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
+    new JoystickButton(m_driverController, Button.kRightBumper.value)
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-
-    left3Button.whileTrue(m_coralShooter.shootCoralCommand(0.5));
+   
+    aButton.whileTrue(m_coralShooter.shootCoralCommand(1));
+    xButton.whileTrue(m_coralShooter.shootCoralCommand(-1));
+    bButton.whileTrue(m_coralShooter.shootCoralCommand(0.25));
   }
 
   /**
