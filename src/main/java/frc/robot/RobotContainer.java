@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.XboxController.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralShooter;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -70,6 +71,8 @@ public class RobotContainer {
   // The shooter subsystem
   private final CoralShooter m_coralShooter = new CoralShooter();
 
+  private final ClimberSubsystem m_Climber = new ClimberSubsystem();
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
@@ -118,6 +121,8 @@ public class RobotContainer {
     aButton.whileTrue(m_coralShooter.shootCoralCommand(1));
     xButton.whileTrue(m_coralShooter.shootCoralCommand(-1));
     bButton.whileTrue(m_coralShooter.shootCoralCommand(0.25));
+    yButton.whileTrue(m_Climber.climberDownCommand());
+    right2Button.whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
   }
 
   /**
