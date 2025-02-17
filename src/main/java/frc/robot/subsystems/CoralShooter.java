@@ -59,6 +59,10 @@ public class CoralShooter extends SubsystemBase {
    return Commands.startEnd(() -> setMotorToPercent(speed), () -> stopMotor(), this);
   }
 
+  public Command warmUpMotorToPercentCommand(String strength) {
+    return Commands.runOnce(() -> setMotorToPercent(strength), this);
+  }
+  
   /**
    * An example method querying a boolean state of the subsystem (for example, a digital sensor).
    *

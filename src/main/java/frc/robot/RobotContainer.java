@@ -17,6 +17,8 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -24,10 +26,13 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralShooter;
 import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -64,6 +69,7 @@ public class RobotContainer {
     private final JoystickButton aButton = new JoystickButton(copilotXbox, Button.kA.value);
     private final JoystickButton yButton = new JoystickButton(copilotXbox, Button.kY.value);
 
+    private SendableChooser<Command> auto = new SendableChooser<>();
 
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
@@ -123,51 +129,30 @@ public class RobotContainer {
     bButton.whileTrue(m_coralShooter.shootCoralCommand(0.25));
     yButton.whileTrue(m_Climber.climberDownCommand());
     right2Button.whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+
+    createAuto();
   }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // Create config for trajectory
-    TrajectoryConfig config = new TrajectoryConfig(
-        AutoConstants.kMaxSpeedMetersPerSecond,
-        AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-        // Add kinematics to ensure max speed is actually obeyed
-        .setKinematics(DriveConstants.kDriveKinematics);
+    public void createAuto() {
+                auto = new SendableChooser<>();
 
-    // An example trajectory to follow. All units in meters.
-    Trajectory exampleTrajectory = TrajectoryGenerator.generateTrajectory(
-        // Start at the origin facing the +X direction
-        new Pose2d(0, 0, new Rotation2d(0)),
-        // Pass through these two interior waypoints, making an 's' curve path
-        List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-        // End 3 meters straight ahead of where we started, facing forward
-        new Pose2d(3, 0, new Rotation2d(0)),
-        config);
-
-    var thetaController = new ProfiledPIDController(
-        AutoConstants.kPThetaController, 0, 0, AutoConstants.kThetaControllerConstraints);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
-
-    SwerveControllerCommand swerveControllerCommand = new SwerveControllerCommand(
-        exampleTrajectory,
-        m_robotDrive::getPose, // Functional interface to feed supplier
-        DriveConstants.kDriveKinematics,
-
-        // Position controllers
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        thetaController,
-        m_robotDrive::setModuleStates,
-        m_robotDrive);
-
-    // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-
-    // Run path following command, then stop at the end.
-    return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false));
+                auto.setDefaultOption("F-E Auto", new PathPlannerAuto("F-E Auto"));
+                auto.addOption("J-I Auto", new PathPlannerAuto("J-I Auto"));
+                auto.addOption("H Auto", new PathPlannerAuto("H Auto"));
+                auto.addOption("G auto", new PathPlannerAuto("G auto"));
+    
+    SmartDashboard.putData("Autonomous Command", auto);
+        }
+    
+    public Command getAutonomousCommand() {
+                // Optional<Alliance> alliance = DriverStation.getAlliance();
+                // if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+                // m_robotDrive.setFlipped(true);
+                // } else {
+                // m_robotDrive.setFlipped(false);
+                // }
+                Command command = auto.getSelected();
+                createAuto();
+                return command;
   }
 }
