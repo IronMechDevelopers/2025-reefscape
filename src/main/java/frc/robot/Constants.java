@@ -47,7 +47,7 @@ public final class Constants {
 
     // SPARK MAX CAN IDs
     
-    public static final int kClimberMotorCanId = 91; // change this to the real canid
+    // public static final int kClimberMotorCanId = 91; // change this to the real canid
     
     public static final int kFrontLeftDrivingCanId = 10;
     public static final int kFrontRightDrivingCanId = 20;
@@ -74,8 +74,8 @@ public final class Constants {
   public static final class MotorIds {
 
     public static final int kTopShooterMotor = 51;
-    public static final int kClimberMotorCanId = 91; // change this to the real canid
-
+    public static final int kClimberMotorCanId = 62;
+    public static final int kCageDoorMotorCanId = 52;
 
   }
 
@@ -123,9 +123,15 @@ public final class Constants {
     
 
   }
+
   public static final class ClimberConstants {
     public static final double climberSpeedUp = 1;
     public static final double climberSpeedDown = -1;
+  }
+
+  public static final class CageDoorConstants {
+    public static final double cageopenSpeed = 0.25;
+    public static final double cagecloseSpeed = -1;
   }
 }
 

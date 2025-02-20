@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.CageDoorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralShooter;
 import frc.robot.subsystems.DriveSubsystem;
@@ -79,6 +80,8 @@ public class RobotContainer {
 
   private final ClimberSubsystem m_Climber = new ClimberSubsystem();
 
+  private final CageDoorSubsystem m_CageDoorSubsystem = new CageDoorSubsystem();
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
@@ -128,21 +131,24 @@ public class RobotContainer {
     xButton.whileTrue(m_coralShooter.shootCoralCommand(-1));
     bButton.whileTrue(m_coralShooter.shootCoralCommand(0.25));
     yButton.whileTrue(m_Climber.climberDownCommand());
+    right4Button.whileTrue(m_Climber.climberUpCommand());
     right2Button.whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+    left3Button.whileTrue(m_CageDoorSubsystem.cagedooropenCommand());
+    right3Button.whileTrue(m_CageDoorSubsystem.cagedoorcloseCommand());
 
     createAuto();
   }
 
     public void createAuto() {
-                auto = new SendableChooser<>();
+        // auto = new SendableChooser<>();
 
-                auto.setDefaultOption("F-E Auto", new PathPlannerAuto("F-E Auto"));
-                auto.addOption("J-I Auto", new PathPlannerAuto("J-I Auto"));
-                auto.addOption("H Auto", new PathPlannerAuto("H Auto"));
-                auto.addOption("G auto", new PathPlannerAuto("G auto"));
-    
-    SmartDashboard.putData("Autonomous Command", auto);
-        }
+        // auto.setDefaultOption("F-E Auto", new PathPlannerAuto("F-E Auto"));
+        // auto.addOption("J-I Auto", new PathPlannerAuto("J-I Auto"));
+        // auto.addOption("H Auto", new PathPlannerAuto("H Auto"));
+        // auto.addOption("G auto", new PathPlannerAuto("G auto"));
+
+        // SmartDashboard.putData("Autonomous Command", auto);
+    }
     
     public Command getAutonomousCommand() {
                 // Optional<Alliance> alliance = DriverStation.getAlliance();
@@ -154,5 +160,5 @@ public class RobotContainer {
                 Command command = auto.getSelected();
                 createAuto();
                 return command;
-  }
+ }
 }
