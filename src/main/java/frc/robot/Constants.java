@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.config.PIDConstants;
+
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
@@ -45,6 +47,7 @@ public final class Constants {
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
+ 
     // SPARK MAX CAN IDs
     
     // public static final int kClimberMotorCanId = 91; // change this to the real canid
@@ -70,7 +73,11 @@ public final class Constants {
     // public static final int kRearLeftTurningCanId = 21;
 
     public static final boolean kGyroReversed = false;
+
+    
   }
+
+
   public static final class MotorIds {
 
     public static final int kTopShooterMotor = 51;

@@ -140,14 +140,15 @@ public class RobotContainer {
   }
 
     public void createAuto() {
-        // auto = new SendableChooser<>();
+        auto = new SendableChooser<>();
 
-        // auto.setDefaultOption("F-E Auto", new PathPlannerAuto("F-E Auto"));
-        // auto.addOption("J-I Auto", new PathPlannerAuto("J-I Auto"));
-        // auto.addOption("H Auto", new PathPlannerAuto("H Auto"));
-        // auto.addOption("G auto", new PathPlannerAuto("G auto"));
+        auto.setDefaultOption("F-E Auto", new PathPlannerAuto("F-E Auto"));
+        auto.addOption("J-I Auto", new PathPlannerAuto("J-I Auto"));
+        auto.addOption("H Auto", new PathPlannerAuto("H Auto"));
+        auto.addOption("G auto", new PathPlannerAuto("G auto"));
+        auto.addOption("Practice Auto", new PathPlannerAuto("Practice Auto"));
 
-        // SmartDashboard.putData("Autonomous Command", auto);
+        SmartDashboard.putData("Autonomous Command", auto);
     }
     
     public Command getAutonomousCommand() {
