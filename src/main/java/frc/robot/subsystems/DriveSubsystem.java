@@ -25,6 +25,7 @@ import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.AnalogInput;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -69,7 +70,9 @@ public class DriveSubsystem extends SubsystemBase {
   private MAXSwerveModule[] swerveModules;
   private boolean fieldOrientation = true;
 
-    /**
+  final AnalogInput distanceSensor = new AnalogInput(0);
+
+  /**
    * Standard deviations of model states. Increase these numbers to trust your
    * model's state estimates less. This
    * matrix is in the form [x, y, theta]ᵀ, with units in meters and radians, then
@@ -88,7 +91,7 @@ public class DriveSubsystem extends SubsystemBase {
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(m_gyro.getAngle()),
+      Rotation2d.fromDegrees(getAngle()),
       new SwerveModulePosition[] {
           m_frontLeft.getPosition(),
           m_frontRight.getPosition(),
@@ -99,56 +102,58 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     swerveModules = new MAXSwerveModule[] { m_frontLeft, m_frontRight, m_rearLeft, m_rearRight };
-    
+
     // Usage reporting for MAXSwerve template
     HAL.report(tResourceType.kResourceType_RobotDrive, tInstances.kRobotDriveSwerve_MaxSwerve);
     zeroHeading();
 
-        // Load the RobotConfig from the GUI settings. You should probably
+    // Load the RobotConfig from the GUI settings. You should probably
     // store this in your Constants file
-    
-    try{
+
+    try {
       config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
       // Handle exception as needed
       e.printStackTrace();
     }
 
-        poseEstimator = new SwerveDrivePoseEstimator(
+    poseEstimator = new SwerveDrivePoseEstimator(
         DriveConstants.kDriveKinematics,
-        getGyroscopeRotation(),
+        getRotaion2D(),
         getModulePositions(),
         new Pose2d(),
         stateStdDevs,
         visionMeasurementStdDevs);
 
-        // Configure AutoBuilder last
-        AutoBuilder.configure(
-          this::getCurrentPose, // Robot pose supplier
-          this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-          this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-          (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-          new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                  new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                  new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-          ),
-          config, // The robot configuration
-          () -> {
-            // Boolean supplier that controls when the path will be mirrored for the red alliance
-            // This will flip the path being followed to the red side of the field.
-            // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+    // Configure AutoBuilder last
+    AutoBuilder.configure(
+        this::getCurrentPose, // Robot pose supplier
+        this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE
+                                                              // ChassisSpeeds. Also optionally outputs individual
+                                                              // module feedforwards
+        new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic
+                                        // drive trains
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+        ),
+        config, // The robot configuration
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-            var alliance = DriverStation.getAlliance();
-            if (alliance.isPresent()) {
-              return alliance.get() == DriverStation.Alliance.Red;
-            }
-            return false;
-          },
-          this // Reference to this subsystem to set requirements
-  );
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
+    );
 
-    
-    
   }
 
   public Pose2d getCurrentPose() {
@@ -166,28 +171,32 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-
-    
-   poseEstimator.update(getGyroscopeRotation(), getModulePositions());
+    poseEstimator.update(getRotaion2D(), getModulePositions());
 
     Pose2d pose = poseEstimator.getEstimatedPosition();
-    SmartDashboard.putBoolean("is field orientation", fieldOrientation);
-    SmartDashboard.putString("Pose", getFormattedPose());
-    // SmartDashboard.putNumber("gyro angle", Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)).getDegrees());
-    // SmartDashboard.putNumber("pose angle",  getCurrentPose().getRotation().getDegrees());
-    // field2d.setRobotPose(getCurrentPose());
+    // SmartDashboard.putBoolean("is field orientation", fieldOrientation);
+    // SmartDashboard.putString("Pose", getFormattedPose());
+    // SmartDashboard.putNumber("distanceSensor", distanceSensor.getValue());
+
+    // SmartDashboard.putNumber("gyro angle", getAngle());
+    // // SmartDashboard.putNumber("gyro angle from rotation", getRotaion2D().getDegrees());
+
+    SmartDashboard.putNumber("X:", poseEstimator.getEstimatedPosition().getX());
+    SmartDashboard.putNumber("Y:", poseEstimator.getEstimatedPosition().getY());
+    SmartDashboard.putNumber("Rotatio:", poseEstimator.getEstimatedPosition().getRotation().getDegrees());
 
     // myPosePublisher.set(pose);
     // mySwerveStatesPublisher.set(getModuleStates());
 
-    
+    // .4-3.1 V between 80cm - 10cm
+
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(getModuleStates());
   }
 
-    /**
+  /**
    * Gets the current drivetrain position, as reported by the modules themselves.
    * 
    * @return current drivetrain state. Array orders are frontLeft, frontRight,
@@ -196,7 +205,6 @@ public class DriveSubsystem extends SubsystemBase {
   public SwerveModulePosition[] getModulePositions() {
     return Arrays.stream(swerveModules).map(module -> module.getPosition()).toArray(SwerveModulePosition[]::new);
   }
-
 
   public void driveRobotRelative(ChassisSpeeds robotRelativeSpeeds) {
     ChassisSpeeds targetSpeeds = ChassisSpeeds.discretize(robotRelativeSpeeds, 0.02);
@@ -224,8 +232,6 @@ public class DriveSubsystem extends SubsystemBase {
     return Arrays.stream(swerveModules).map(module -> module.getState()).toArray(SwerveModuleState[]::new);
   }
 
- 
-
   /**
    * Resets the current pose to the specified pose. This should ONLY be called
    * when the robot's position on the field is known, like at the beginning of
@@ -235,7 +241,7 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void resetPose(Pose2d newPose) {
     poseEstimator.resetPosition(
-        getGyroscopeRotation(),
+        getRotaion2D(),
         getModulePositions(),
         newPose);
   }
@@ -244,20 +250,9 @@ public class DriveSubsystem extends SubsystemBase {
     return -m_gyro.getAngle();
   }
 
-  public Rotation2d getGyroscopeRotation() {
-    return Rotation2d.fromDegrees(m_gyro.getAngle());
-
-    // We have to invert the angle of the NavX so that rotating the robot
-    // counter-clockwise makes the angle increase.
-    // return Rotation2d.fromDegrees(360.0 - navx.getYaw());
+  public Rotation2d getRotaion2D() {
+    return Rotation2d.fromDegrees(getAngle());
   }
-
-  
-
-  
-  // public void zeroHeading() {
-  // resetOdometry(getPose());
-  // }
 
   /**
    * Resets the odometry to the specified pose.

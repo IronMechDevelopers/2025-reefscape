@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.HatchDoorConstants;
 import frc.robot.Constants.MotorIds;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
@@ -18,6 +19,8 @@ public class ClimberSubsystem extends SubsystemBase {
   
   private SparkMax climberMotor;
     private double currentPercentage;
+    private SparkMax hatchMotor;
+    private double currentHatchPercentage;
   
     /** Creates a new ClimberSubsystem. */
     public ClimberSubsystem() {
@@ -25,10 +28,13 @@ public class ClimberSubsystem extends SubsystemBase {
       this.climberMotor = new SparkMax(MotorIds.kClimberMotorCanId,
           MotorType.kBrushed);
       currentPercentage = 0;
+      this.hatchMotor = new SparkMax(MotorIds.kHatchDoorMotorCanId,
+      MotorType.kBrushed);
+      currentHatchPercentage = 0;
   
     }
   
-    public void setMotor(double speed) {
+    publioid setMotor(double speed) {
       this.climberMotor.set(speed);
       currentPercentage = speed;
     }
@@ -41,6 +47,7 @@ public class ClimberSubsystem extends SubsystemBase {
     public void periodic() {
       // This method will be called once per scheduler run
       SmartDashboard.putNumber("ClimberSubsystem Percentage", currentPercentage);
+      // SmartDashboard.putNumber("HatchDoorSubsystem Percentage", currentPercentage);
     }
     
     public Command climberUpCommand() {
@@ -52,4 +59,28 @@ public class ClimberSubsystem extends SubsystemBase {
     return Commands.startEnd(() -> setMotor(ClimberConstants.climberSpeedDown),
     () -> stopMotor(), this);
   }
+
+  public void setHatchMotor(double speed) {
+    this.hatchMotor.set(speed);
+    currentPercentage = speed;
+  }
+
+  public void stopHatchMotor() {
+    setHatchMotor(0);
+  }
+
+
+  
+  
+  public Command HatchDooropenCommand() {
+    return Commands.startEnd(() -> setHatchMotor(HatchDoorConstants.hatchdooropenSpeed), ()
+  -> stopHatchMotor(), this);
+}
+
+public Command HatchDoorcloseCommand() {
+  return Commands.startEnd(() -> setHatchMotor(HatchDoorConstants.hatchdoorclosedSpeed),
+  () -> stopHatchMotor(), this);
+}
+  
+    
 }

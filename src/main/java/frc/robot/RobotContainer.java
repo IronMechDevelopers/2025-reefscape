@@ -33,6 +33,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 /*
@@ -69,6 +71,8 @@ public class RobotContainer {
     private final JoystickButton bButton = new JoystickButton(copilotXbox, Button.kB.value);
     private final JoystickButton aButton = new JoystickButton(copilotXbox, Button.kA.value);
     private final JoystickButton yButton = new JoystickButton(copilotXbox, Button.kY.value);
+    private final JoystickButton kLeftBumper = new JoystickButton(copilotXbox, Button.kLeftBumper.value);
+    private final JoystickButton kRightBumper = new JoystickButton(copilotXbox, Button.kRightBumper.value);
 
     private SendableChooser<Command> auto = new SendableChooser<>();
 
@@ -82,6 +86,8 @@ public class RobotContainer {
 
   private final CageDoorSubsystem m_CageDoorSubsystem = new CageDoorSubsystem();
 
+  
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
@@ -89,6 +95,11 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    // NamedCommands.registerCommand("Score Coral", 
+    // m_coralShooter.shootCoralCommand(0.25).withTimeout(5));
+
+
+
     // Configure the button bindings
     configureButtonBindings();
 
@@ -103,6 +114,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(driverRightStick.getX(), OIConstants.kDriveDeadband),
                 true),
                 m_robotDrive));
+                
             //     new RunCommand(
             // () -> m_robotDrive.drive(
             //     -MathUtil.applyDeadband(0, OIConstants.kDriveDeadband),
@@ -110,6 +122,8 @@ public class RobotContainer {
             //     -MathUtil.applyDeadband(0.2, OIConstants.kDriveDeadband),
             //     true),
             //     m_robotDrive));
+
+
   }
 
   /**
@@ -135,6 +149,9 @@ public class RobotContainer {
     right2Button.whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
     left3Button.whileTrue(m_CageDoorSubsystem.cagedooropenCommand());
     right3Button.whileTrue(m_CageDoorSubsystem.cagedoorcloseCommand());
+    kLeftBumper.whileTrue(m_Climber.HatchDooropenCommand());
+    kRightBumper.whileTrue(m_Climber.HatchDoorcloseCommand());
+
 
     createAuto();
   }
@@ -145,7 +162,7 @@ public class RobotContainer {
         auto.setDefaultOption("F-E Auto", new PathPlannerAuto("F-E Auto"));
         auto.addOption("J-I Auto", new PathPlannerAuto("J-I Auto"));
         auto.addOption("H Auto", new PathPlannerAuto("H Auto"));
-        auto.addOption("G auto", new PathPlannerAuto("G auto"));
+        auto.addOption("G Auto", new PathPlannerAuto("G Auto"));
         auto.addOption("Practice Auto", new PathPlannerAuto("Practice Auto"));
 
         SmartDashboard.putData("Autonomous Command", auto);
@@ -162,4 +179,6 @@ public class RobotContainer {
                 createAuto();
                 return command;
  }
+
+
 }

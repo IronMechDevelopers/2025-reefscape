@@ -31,9 +31,9 @@ public final class Constants {
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(25.5);
+    public static final double kTrackWidth = Units.inchesToMeters(29);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(25.5);
+    public static final double kWheelBase = Units.inchesToMeters(29);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -83,6 +83,7 @@ public final class Constants {
     public static final int kTopShooterMotor = 51;
     public static final int kClimberMotorCanId = 62;
     public static final int kCageDoorMotorCanId = 52;
+    public static final int kHatchDoorMotorCanId = 42;
 
   }
 
@@ -105,7 +106,7 @@ public final class Constants {
 
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
-    public static final double kDriveDeadband = 0.05;
+    public static final double kDriveDeadband = 0.01;
   }
 
   public static final class AutoConstants {
@@ -139,6 +140,11 @@ public final class Constants {
   public static final class CageDoorConstants {
     public static final double cageopenSpeed = 0.25;
     public static final double cagecloseSpeed = -1;
+  }
+
+    public static final class HatchDoorConstants {
+      public static final double hatchdooropenSpeed = 0.25;
+      public static final double hatchdoorclosedSpeed = -1;
   }
 }
 
