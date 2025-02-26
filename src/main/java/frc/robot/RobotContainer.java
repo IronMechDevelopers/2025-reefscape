@@ -6,6 +6,8 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
@@ -22,7 +24,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.CageDoorSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralShooter;
 import frc.robot.subsystems.DriveSubsystem;
@@ -33,6 +34,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.TimedRobot;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -44,38 +47,6 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
  * (including subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
-    private static final Joystick driverLeftStick = new Joystick(0);
-    private static final Joystick driverRightStick = new Joystick(1);
-    private static final XboxController copilotXbox = new XboxController(2);
-
-    private final JoystickButton left1Button = new JoystickButton(driverLeftStick, 1);
-    private final JoystickButton left2Button = new JoystickButton(driverLeftStick, 2);
-    private final JoystickButton left3Button = new JoystickButton(driverLeftStick, 3);
-    private final JoystickButton left4Button = new JoystickButton(driverLeftStick, 4);
-
-    private final JoystickButton left7Button = new JoystickButton(driverLeftStick, 7);
-    private final JoystickButton left8Button = new JoystickButton(driverLeftStick, 8);
-    private final JoystickButton left9Button = new JoystickButton(driverLeftStick, 9);
-    private final JoystickButton left10Button = new JoystickButton(driverLeftStick, 10);
-
-    private final JoystickButton right1Button = new JoystickButton(driverRightStick, 1);
-    private final JoystickButton right2Button = new JoystickButton(driverRightStick, 2);
-    private final JoystickButton right3Button = new JoystickButton(driverRightStick, 3);
-    private final JoystickButton right4Button = new JoystickButton(driverRightStick, 4);
-    private final JoystickButton right6Button = new JoystickButton(driverRightStick, 6);
-
-    private final JoystickButton right9Button = new JoystickButton(driverRightStick, 9);
-    private final JoystickButton right10Button = new JoystickButton(driverRightStick, 10);
-    
-    private final JoystickButton xButton = new JoystickButton(copilotXbox, Button.kX.value);
-    private final JoystickButton bButton = new JoystickButton(copilotXbox, Button.kB.value);
-    private final JoystickButton aButton = new JoystickButton(copilotXbox, Button.kA.value);
-    private final JoystickButton yButton = new JoystickButton(copilotXbox, Button.kY.value);
-    private final JoystickButton kLeftBumper = new JoystickButton(copilotXbox, Button.kLeftBumper.value);
-    private final JoystickButton kRightBumper = new JoystickButton(copilotXbox, Button.kRightBumper.value);
-
-    private SendableChooser<Command> auto = new SendableChooser<>();
-
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
@@ -84,9 +55,39 @@ public class RobotContainer {
 
   private final ClimberSubsystem m_Climber = new ClimberSubsystem();
 
-  private final CageDoorSubsystem m_CageDoorSubsystem = new CageDoorSubsystem();
+  private static final Joystick driverLeftStick = new Joystick(0);
+  private static final Joystick driverRightStick = new Joystick(1);
+  private static final XboxController copilotXbox = new XboxController(2);
 
-  
+  private final JoystickButton left1Button = new JoystickButton(driverLeftStick, 1);
+  private final JoystickButton left2Button = new JoystickButton(driverLeftStick, 2);
+  private final JoystickButton left3Button = new JoystickButton(driverLeftStick, 3);
+  private final JoystickButton left4Button = new JoystickButton(driverLeftStick, 4);
+
+  private final JoystickButton left7Button = new JoystickButton(driverLeftStick, 7);
+  private final JoystickButton left8Button = new JoystickButton(driverLeftStick, 8);
+  private final JoystickButton left9Button = new JoystickButton(driverLeftStick, 9);
+  private final JoystickButton left10Button = new JoystickButton(driverLeftStick, 10);
+
+  private final JoystickButton right1Button = new JoystickButton(driverRightStick, 1);
+  private final JoystickButton right2Button = new JoystickButton(driverRightStick, 2);
+  private final JoystickButton right3Button = new JoystickButton(driverRightStick, 3);
+  private final JoystickButton right4Button = new JoystickButton(driverRightStick, 4);
+  private final JoystickButton right6Button = new JoystickButton(driverRightStick, 6);
+  private final JoystickButton right7Button = new JoystickButton(driverRightStick, 7);
+  private final JoystickButton right8Button = new JoystickButton(driverRightStick, 8);
+
+  private final JoystickButton right9Button = new JoystickButton(driverRightStick, 9);
+  private final JoystickButton right10Button = new JoystickButton(driverRightStick, 10);
+
+  private final JoystickButton xButton = new JoystickButton(copilotXbox, Button.kX.value);
+  private final JoystickButton bButton = new JoystickButton(copilotXbox, Button.kB.value);
+  private final JoystickButton aButton = new JoystickButton(copilotXbox, Button.kA.value);
+  private final JoystickButton yButton = new JoystickButton(copilotXbox, Button.kY.value);
+  private final JoystickButton kLeftBumper = new JoystickButton(copilotXbox, Button.kLeftBumper.value);
+  private final JoystickButton kRightBumper = new JoystickButton(copilotXbox, Button.kRightBumper.value);
+
+  private SendableChooser<Command> auto = new SendableChooser<>();
 
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
@@ -95,13 +96,11 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    // NamedCommands.registerCommand("Score Coral", 
-    // m_coralShooter.shootCoralCommand(0.25).withTimeout(5));
 
+    // CameraServer.startAutomaticCapture();
 
-
-    // Configure the button bindings
-    configureButtonBindings();
+    NamedCommands.registerCommand("Score Coral",
+        m_coralShooter.shootCoralCommand(0.25).withTimeout(5));
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -113,17 +112,18 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(driverLeftStick.getX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(driverRightStick.getX(), OIConstants.kDriveDeadband),
                 true),
-                m_robotDrive));
-                
-            //     new RunCommand(
-            // () -> m_robotDrive.drive(
-            //     -MathUtil.applyDeadband(0, OIConstants.kDriveDeadband),
-            //     -MathUtil.applyDeadband(0, OIConstants.kDriveDeadband),
-            //     -MathUtil.applyDeadband(0.2, OIConstants.kDriveDeadband),
-            //     true),
-            //     m_robotDrive));
+            m_robotDrive));
 
+    // new RunCommand(
+    // () -> m_robotDrive.drive(
+    // -MathUtil.applyDeadband(0, OIConstants.kDriveDeadband),
+    // -MathUtil.applyDeadband(0, OIConstants.kDriveDeadband),
+    // -MathUtil.applyDeadband(0.2, OIConstants.kDriveDeadband),
+    // true),
+    // m_robotDrive));
 
+    // Configure the button bindings
+    configureButtonBindings();
   }
 
   /**
@@ -140,45 +140,47 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-   
+
     aButton.whileTrue(m_coralShooter.shootCoralCommand(1));
     xButton.whileTrue(m_coralShooter.shootCoralCommand(-1));
     bButton.whileTrue(m_coralShooter.shootCoralCommand(0.25));
     yButton.whileTrue(m_Climber.climberDownCommand());
     right4Button.whileTrue(m_Climber.climberUpCommand());
     right2Button.whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
-    left3Button.whileTrue(m_CageDoorSubsystem.cagedooropenCommand());
-    right3Button.whileTrue(m_CageDoorSubsystem.cagedoorcloseCommand());
-    kLeftBumper.whileTrue(m_Climber.HatchDooropenCommand());
-    kRightBumper.whileTrue(m_Climber.HatchDoorcloseCommand());
+    right3Button.onTrue(m_Climber.setUpClimb());
 
+    // PIT COMMANDS
+    right9Button.whileTrue(m_Climber.CageDooropenCommand());
+    right10Button.whileTrue(m_Climber.CageDoorcloseCommand());
+
+    right7Button.whileTrue(m_Climber.HatchDooropenCommand());
+    right8Button.whileTrue(m_Climber.HatchDoorcloseCommand());
 
     createAuto();
   }
 
-    public void createAuto() {
-        auto = new SendableChooser<>();
+  public void createAuto() {
+    auto = new SendableChooser<>();
 
-        auto.setDefaultOption("F-E Auto", new PathPlannerAuto("F-E Auto"));
-        auto.addOption("J-I Auto", new PathPlannerAuto("J-I Auto"));
-        auto.addOption("H Auto", new PathPlannerAuto("H Auto"));
-        auto.addOption("G Auto", new PathPlannerAuto("G Auto"));
-        auto.addOption("Practice Auto", new PathPlannerAuto("Practice Auto"));
+    auto.setDefaultOption("F-E Auto", new PathPlannerAuto("F-E Auto"));
+    auto.addOption("J-I Auto", new PathPlannerAuto("J-I Auto"));
+    auto.addOption("H Auto", new PathPlannerAuto("H Auto"));
+    auto.addOption("G Auto", new PathPlannerAuto("G Auto"));
+    auto.addOption("Practice Auto", new PathPlannerAuto("Practice Auto"));
 
-        SmartDashboard.putData("Autonomous Command", auto);
-    }
-    
-    public Command getAutonomousCommand() {
-                // Optional<Alliance> alliance = DriverStation.getAlliance();
-                // if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
-                // m_robotDrive.setFlipped(true);
-                // } else {
-                // m_robotDrive.setFlipped(false);
-                // }
-                Command command = auto.getSelected();
-                createAuto();
-                return command;
- }
+    SmartDashboard.putData("Autonomous Command", auto);
+  }
 
+  public Command getAutonomousCommand() {
+    // Optional<Alliance> alliance = DriverStation.getAlliance();
+    // if (alliance.isPresent() && alliance.get() == DriverStation.Alliance.Red) {
+    // m_robotDrive.setFlipped(true);
+    // } else {
+    // m_robotDrive.setFlipped(false);
+    // }
+    Command command = auto.getSelected();
+    createAuto();
+    return command;
+  }
 
 }

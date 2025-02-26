@@ -70,7 +70,7 @@ public class DriveSubsystem extends SubsystemBase {
   private MAXSwerveModule[] swerveModules;
   private boolean fieldOrientation = true;
 
-  final AnalogInput distanceSensor = new AnalogInput(0);
+  // final AnalogInput distanceSensor = new AnalogInput(0);
 
   /**
    * Standard deviations of model states. Increase these numbers to trust your
