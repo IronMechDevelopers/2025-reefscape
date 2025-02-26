@@ -34,7 +34,7 @@ public class ClimberSubsystem extends SubsystemBase {
   
     }
   
-    publioid setMotor(double speed) {
+    public void setMotor(double speed) {
       this.climberMotor.set(speed);
       currentPercentage = speed;
     }
