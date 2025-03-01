@@ -83,7 +83,7 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   public Command setUpClimb() {
-    return HatchDooropenCommand().withTimeout(.75).andThen(CageDooropenCommand().withTimeout(.25));
+    return HatchDooropenCommand().withTimeout(1).andThen(CageDooropenCommand().withTimeout(1));
   }
 
   public Command HatchDooropenCommand() {
@@ -92,12 +92,12 @@ public class ClimberSubsystem extends SubsystemBase {
 
   public Command HatchDoorcloseCommand() {
     return Commands.startEnd(() -> setHatchMotor(HatchDoorConstants.hatchdoorclosedSpeed),
-        () -> stopCageDoorMotor(), this);
+        () -> stopHatchMotor(), this);
   }
 
 
   public Command CageDooropenCommand() {
-    return Commands.startEnd(() -> setCageDoorMotor(CageDoorConstants.cageopenSpeed), () -> stopHatchMotor(), this);
+    return Commands.startEnd(() -> setCageDoorMotor(CageDoorConstants.cageopenSpeed), () -> stopCageDoorMotor(), this);
   }
 
   public Command CageDoorcloseCommand() {

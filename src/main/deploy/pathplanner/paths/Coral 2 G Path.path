@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 6.233606557382721,
-        "y": 4.09093237704918
+        "x": 0.8631147540983605,
+        "y": 0.95015368852459
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.024795081967212,
-        "y": 4.678329918032786
+        "x": 2.0139344262295085,
+        "y": 1.6214651639344266
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.878995901639344,
-        "y": 7.09984631147541
+        "x": 2.4335040983606557,
+        "y": 1.885194672131147
       },
       "prevControl": {
-        "x": 6.940881147540983,
-        "y": 7.159784836065573
+        "x": 1.8700819672131144,
+        "y": 1.5735143442622952
       },
       "nextControl": {
-        "x": 3.677859208790074,
-        "y": 7.064929547148397
+        "x": 3.0446106112595666,
+        "y": 2.2232535941603313
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 0.8870901639344262,
-        "y": 7.303637295081967
+        "x": 3.692213114754098,
+        "y": 2.8801741803278684
       },
       "prevControl": {
-        "x": 0.685878647647858,
-        "y": 7.483693978954133
+        "x": 3.452459016393442,
+        "y": 2.5565061475409836
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,8 +49,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.5,
-    "maxAcceleration": 1.5,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -58,13 +58,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -55.840305455442106
+    "rotation": 55.0
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
-    "velocity": 0,
-    "rotation": 179.67811698460127
+    "velocity": 0.0,
+    "rotation": 50.38931175997336
   },
   "useDefaultConstraints": false
 }

@@ -11,6 +11,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Score Coral"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Collector F-E Path"

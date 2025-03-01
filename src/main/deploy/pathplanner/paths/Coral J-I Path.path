@@ -8,20 +8,36 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.413422131147541,
-        "y": 5.457530737704917
+        "x": 6.139911036609436,
+        "y": 5.354303065440538
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.38247950819672,
-        "y": 5.505481557378599
+        "x": 5.658196721311475,
+        "y": 6.128842213114754
       },
       "prevControl": {
-        "x": 6.245594262295082,
-        "y": 5.517469262296632
+        "x": 5.871096192461997,
+        "y": 6.259891116901958
+      },
+      "nextControl": {
+        "x": 5.4452972501609525,
+        "y": 5.99779330932755
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.142725409836065,
+        "y": 5.133862704918033
+      },
+      "prevControl": {
+        "x": 5.635546453006901,
+        "y": 5.855350326018846
       },
       "nextControl": null,
       "isLocked": false,
@@ -31,17 +47,10 @@
   "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
-  "eventMarkers": [
-    {
-      "name": "Score Coral",
-      "waypointRelativePos": 1.0,
-      "endWaypointRelativePos": null,
-      "command": null
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 1.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

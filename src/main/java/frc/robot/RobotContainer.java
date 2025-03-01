@@ -97,10 +97,11 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    // CameraServer.startAutomaticCapture();
+    CameraServer.startAutomaticCapture();
 
     NamedCommands.registerCommand("Score Coral",
-        m_coralShooter.shootCoralCommand(0.25).withTimeout(5));
+        m_coralShooter.shootCoralCommand(-0.5).withTimeout(.25)
+        .andThen(m_coralShooter.shootCoralCommand(0.5).withTimeout(1)));
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
