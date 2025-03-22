@@ -24,6 +24,8 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj.AnalogInput;
 
@@ -69,6 +71,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   private MAXSwerveModule[] swerveModules;
   private boolean fieldOrientation = true;
+  private boolean isFullSpeed = true;
 
   // final AnalogInput distanceSensor = new AnalogInput(0);
 
@@ -156,6 +159,14 @@ public class DriveSubsystem extends SubsystemBase {
 
   }
 
+  public void switchMaxSpeed() {
+    isFullSpeed = !isFullSpeed;
+  }
+
+  public void invertFieldOrientation() {
+    fieldOrientation = !fieldOrientation;
+  }
+
   public Pose2d getCurrentPose() {
     return poseEstimator.getEstimatedPosition();
   }
@@ -184,6 +195,8 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("X:", poseEstimator.getEstimatedPosition().getX());
     SmartDashboard.putNumber("Y:", poseEstimator.getEstimatedPosition().getY());
     SmartDashboard.putNumber("Rotatio:", poseEstimator.getEstimatedPosition().getRotation().getDegrees());
+
+    SmartDashboard.putBoolean("fieldRelative", fieldOrientation);
 
     // myPosePublisher.set(pose);
     // mySwerveStatesPublisher.set(getModuleStates());
@@ -282,10 +295,28 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeed * DriveConstants.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = ySpeed * DriveConstants.kMaxSpeedMetersPerSecond;
+
+    if (DriverStation.getAlliance().get() == Alliance.Red) 
+    {
+      xSpeed=-1*xSpeed;
+      ySpeed=-1*ySpeed;
+    }
+    
+    double maxSpeed = 0;
+    if (isFullSpeed) {
+      maxSpeed = DriveConstants.kMaxSpeedMetersPerSecond;
+    } else {
+      maxSpeed = DriveConstants.kHalfSpeedMetersPerSecond;
+    }
+
+    fieldRelative = fieldOrientation;
+
+    double xSpeedDelivered = xSpeed * maxSpeed;
+    double ySpeedDelivered = ySpeed * maxSpeed;
     double rotDelivered = rot * DriveConstants.kMaxAngularSpeed;
 
+    SmartDashboard.putNumber("xSpeed", xSpeedDelivered);
+    SmartDashboard.putNumber("ySpeed", ySpeedDelivered);
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered,
@@ -293,7 +324,9 @@ public class DriveSubsystem extends SubsystemBase {
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
-    m_frontLeft.setDesiredState(swerveModuleStates[0]);
+    
+
+        m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
     m_rearRight.setDesiredState(swerveModuleStates[3]);
@@ -352,5 +385,13 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public double getTurnRate() {
     return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+   public Command switchMaxSpeedCommand() {
+    return Commands.runOnce(() -> switchMaxSpeed());
+  }
+
+  public Command invertFieldRelativeComand() {
+    return Commands.runOnce(() -> invertFieldOrientation(), this);
   }
 }

@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+// import edu.wpi.first.wpilibj.PS4Controller;
 
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -109,9 +110,9 @@ public class RobotContainer {
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
             () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(driverLeftStick.getY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(driverLeftStick.getX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(driverRightStick.getX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(driverLeftStick.getY(), OIConstants.kDriveDeadbandLeft),
+                -MathUtil.applyDeadband(driverLeftStick.getX(), OIConstants.kDriveDeadbandLeft),
+                -MathUtil.applyDeadband(driverRightStick.getX(), OIConstants.kDriveDeadbandRight),
                 true),
             m_robotDrive));
 
@@ -145,16 +146,19 @@ public class RobotContainer {
     aButton.whileTrue(m_coralShooter.shootCoralCommand(1));
     xButton.whileTrue(m_coralShooter.shootCoralCommand(-1));
     bButton.whileTrue(m_coralShooter.shootCoralCommand(0.25));
-    yButton.whileTrue(m_Climber.climberDownCommand());
+    yButton.whileTrue(m_coralShooter.shootCoralCommand(-0.5));
+    kRightBumper.whileTrue(m_Climber.climberDownCommand());
+    kLeftBumper.onTrue(m_Climber.setUpClimb());
     right4Button.whileTrue(m_Climber.climberUpCommand());
-    right2Button.whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
-    right3Button.onTrue(m_Climber.setUpClimb());
+    right3Button.whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+    right2Button.whileTrue(m_Climber.CageDoorcloseCommand());
+    right1Button.toggleOnTrue(m_robotDrive.switchMaxSpeedCommand());
+    left1Button.toggleOnTrue(m_robotDrive.invertFieldRelativeComand());
 
     // PIT COMMANDS
-    right9Button.whileTrue(m_Climber.CageDooropenCommand());
-    right10Button.whileTrue(m_Climber.CageDoorcloseCommand());
-
-    right7Button.whileTrue(m_Climber.HatchDooropenCommand());
+    right10Button.whileTrue(m_Climber.CageDooropenCommand());
+  
+    right9Button.whileTrue(m_Climber.HatchDooropenCommand());
     right8Button.whileTrue(m_Climber.HatchDoorcloseCommand());
 
     createAuto();
@@ -168,6 +172,9 @@ public class RobotContainer {
     auto.addOption("H Auto", new PathPlannerAuto("H Auto"));
     auto.addOption("G Auto", new PathPlannerAuto("G Auto"));
     auto.addOption("Practice Auto", new PathPlannerAuto("Practice Auto"));
+    auto.addOption("J-I Two Coral", new PathPlannerAuto("J-I Two Coral"));
+    auto.addOption("Speed Test", new PathPlannerAuto("Speed Test"));
+
 
     SmartDashboard.putData("Autonomous Command", auto);
   }
